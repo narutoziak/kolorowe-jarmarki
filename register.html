@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+        <!-- Favicon-->
+        <link rel="icon" href="assets/favicon.ico" type="image/x-icon"/>
+        <!-- Bootstrap icons-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+        <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Responsive navbar-->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white">
+
+    </nav>
+    <div class="container--form register">
+        <h1>Rejestracja nowego użytkownika</h1>
+        <form>
+            <p class="text-primary">Wprowadź dane osobiste</p>
+            <div>
+                <label>Imię</label> <br>
+                <input type="text" name="name"> 
+            </div>
+            <p class="feedback--name text-danger"></p>
+            <div>
+                <label>Nazwisko</label> <br>
+                <input type="text" name="surname"> 
+            </div>
+            <p class="feedback--surname text-danger"></p>
+            <div>
+                <label>Email</label> <br>
+                <input type="email" name="email"> 
+            </div>
+            <p class="feedback--email text-danger"></p>
+            <div>
+                <label>Numer Telefonu</label> <br>
+                <input type="text" name="tel"> 
+            </div>
+            <p class="feedback--tel text-danger"></p>
+            <p class="text-primary">Wybierz województwo: </p>
+            <div>
+                <select name="voivodeship" id="voisSelect">
+                    <option selected value="">--Wybierz województwo--</option>
+                    <option value="dolnoslaskie">dolnośląskie</option>
+                    <option value="kujawsko-pomorskie">kujawsko-pomorskie</option>
+                    <option value="lubelskie">lubelskie</option>
+                    <option value="lubuskie">lubuskie</option>
+                    <option value="łódzkie">łódzkie</option>
+                    <option value="małopolskie">małopolskie</option>
+                    <option value="mazowieckie">mazowieckie</option>
+                    <option value="opolskie">opolskie</option>
+                    <option value="podkarpackie">podkarpackie</option>
+                    <option value="podlaskie">podlaskie</option>
+                    <option value="pomorskie">pomorskie</option>
+                    <option value="śląskie">śląskie</option>
+                    <option value="świętokrzyskie">świętokrzyskie</option>
+                    <option value="warmińsko-mazurskie">warmińsko-mazurskie</option>
+                    <option value="wielkopolskie">wielkopolskie</option>
+                    <option value="zachodniopomorskie">zachodniopomorskie</option>
+                </select>
+            </div>
+            <p class="feedback--voivode text-danger"></p>
+            <div>
+                <label>Login</label> <br>
+                <input type="text" name="login"> <br>
+            </div>
+            <p class="feedback--login text-danger"></p>
+            <div>
+                <label>Hasło</label> <br>
+                <input type="password" name="password">
+            </div>
+            <p class="feedback--pass text-danger"></p>
+              <p class="text-primary">Wybierz opcję założenia konta jako:</p>
+            <div class="radios">
+                <div>
+                    <input type="radio" id="buyer" name="radioType" value="buyer">
+                    <label class="not" for="buyer">Kupujący</label>
+                </div>
+                <div>
+                    <input type="radio" id="seller" name="radioType" value="seller">
+                    <label class="not" for="seller">Sprzedający</label>
+                </div>
+            </div>
+            <p class="feedback--radios text-danger"></p>
+            <p class="text-primary">Wybierz swoje zaintersowania: </p>
+            <div class="checkbox">
+                <label class="not">Samochody</label><input type="checkbox" name="hobby" value="cars" >
+                <label class="not">Elektronika</label><input type="checkbox" name="hobby" value="electronics" >
+                <label class="not">Projektowanie wnętrz</label><input type="checkbox" name="hobby" value="home" >
+                <label class="not">Ogród </label><input type="checkbox" name="hobby" value="garden" >
+                <label class="not">Inne</label><input type="checkbox" name="hobby" value="other" >
+            </div>
+            <p class="feedback--check text-danger"></p>
+            <div class="sub">
+                <input type="submit" value="Zarejestruj się" class="form-control btn-primary">
+                <button id="loginButton" class="form-control btn-outline-info">Powrót do logowania</button>
+            </div>
+        </form>
+    </div>
+    <div class="popup">
+        <div class="modal--box">
+            <h2 class="modal--title">Uwaga</h2>
+            <div class="modal--content"></div>
+            <p class="info">Przenoszę do strony logowania...</p>
+            <span class="modal--anim"></span>
+        </div>
+    </div>
+    <!-- Footer-->
+    <footer class="py-5 bg-primary">
+    <div class="container"><p class="m-0 text-center text-white">Copyright &copy; <strong>Kolorowe</strong> Jarmarki 2021</p></div>
+</footer>
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/registerForm.js"></script>
+<script src="js/navigation.js"></script>
+</body>
+</html>
