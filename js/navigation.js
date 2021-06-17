@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', e => {
             `;
         }else{
             nav.innerHTML+= `
-            <li class="nav-item"><a class="nav-link" href="home.html">Moje konto</a></li>
+            <li class="nav-item"><a class="nav-link" href="home.html">Moje konto <i class="bi bi-person"></i></a></li>
             <li class="nav-item logout"><a class="nav-link" href="index.html" >Wyloguj się</a></li>
             `;
             const logout = document.querySelector('.logout');
