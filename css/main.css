@@ -145,12 +145,28 @@
 }
 
 @media screen and (max-width:768px){
+    .search--items{
+        height: unset;
+    }
     .search--items form{
         display: flex;
         flex-direction: column;
     }
-    .input-container{
+    .search--items form input{
         width: 100%;
+    }
+
+    .search--item{
+        width: 100%;
+    }
+
+    .input-container:not(:last-of-type){
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+    .input-container:not(:last-of-type){
+        border-bottom: .2px solid rgb(196, 196, 196);
     }
 }
 
