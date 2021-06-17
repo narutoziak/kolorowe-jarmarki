@@ -144,6 +144,16 @@
 
 }
 
+@media screen and (max-width:768px){
+    .search--items form{
+        display: flex;
+        flex-direction: column;
+    }
+    .input-container{
+        width: 100%;
+    }
+}
+
 @media screen and (min-width: 375px){
     .navbar-brand.mob{
         display: none;
