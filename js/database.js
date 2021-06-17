@@ -9,9 +9,9 @@ const addProduct = (product, id) => {
             <a href="${imgTemplate(product.img_address)}" data-lightbox="${product.title}" data-title="${product.title}">
                 <img src="${imgTemplate(product.img_address)}" onerror="this.onerror=null;this.src='assets/img/noimg.jpg';" class="img-thumbnail img-fluid" alt="${product.title}" data-lightbox="${product.author}" data-title="${product.img_address}">
             </a> 
-            <h5 class="fs-6 fw-bold p-1">${product.title}</h5>
-                <p class="p-1 fw-bold"> ${product.cena} zł </p>
-                <p class="p-1">Dodał: ${product.author}, ${getTime(product)}</p> 
+            <p class="fs-12 p-1 m-0 searching-title">${product.title}</p>
+                <p class="p-1 m-0 fw-bold"> ${product.cena} zł </p>
+                <p class="fs-16 p-1"> ${JSON.parse(localStorage.getItem(product.author)).voivode}, ${getTime(product)}</p>
                 <button type="button" class="btn btn-primary show--offer" data-bs-toggle="modal" data-bs-target="#showProductModal">Przejdź do oferty</button>
         </div>
     </div>
@@ -62,4 +62,37 @@ db.collection('produkty').orderBy('created_at', 'desc').onSnapshot(snapshot => {
         });
     })
 });
+
+
+let getTitle = async () => {
+    let tableRows = document.querySelectorAll('.searching-title');
+    return tableRows;
+}
+
+
+const findItem = (searchingItem) => {
+    getTitle().then(search => {
+        Array.from(search)
+        .filter((title) => !title.textContent.toLocaleLowerCase().includes(searchingItem))
+        .forEach((title) => title.parentElement.parentElement.parentElement.classList.add('filtered', 'flex'));
+    
+        Array.from(search)
+        .filter((title) => title.textContent.toLocaleLowerCase().includes(searchingItem))
+        .forEach((title) => title.parentElement.parentElement.parentElement.classList.remove('filtered', 'flex'));
+    }).catch(err => {
+        console.log(err);
+    })
+ 
+};
+
+
+const indexForm = document.querySelector('input[name="search-item"]');
+indexForm.addEventListener('keyup', e => {
+    e.preventDefault();
+    const query =  indexForm.value.trim().toLowerCase();
+    console.log(query);
+    findItem(query);
+})
+
+
 

@@ -64,27 +64,36 @@
           </div>
           <div class="container-fluid search--items">
               <form>
-                <input type="text" placeholder="Wyszukaj produkt..." name="search-item">
-                <input list="voivodeship" id="voivode--select" name="voivode--select" placeholder="Województwo"/>
-                <datalist id="voivodeship">
-                    <option value="dolnośląskie">
-                    <option value="kujawsko-pomorskie">
-                    <option value="lubelskie">
-                    <option value="lubuskie">
-                    <option value="łódzkie">
-                    <option value="małopolskie">
-                    <option value="mazowieckie">
-                    <option value="opolskie">
-                    <option value="podkarpackie">
-                    <option value="podlaskie">
-                    <option value="pomorskie">
-                    <option value="śląskie">
-                    <option value="świętokrzyskie">
-                    <option value="warmińsko-mazurskie">
-                    <option value="wielkopolskie">
-                    <option value="zachodniopomorskie">
-                </datalist>
-                <input type="submit" value="Szukaj">
+                <div class="input-container">
+                  <i class="bi bi-search"></i>
+                  <input type="text" placeholder="Wyszukaj produkt..." name="search-item">
+                </div>
+                <div class="input-container">
+                  <i class="bi bi-geo-alt"></i>
+                  <input list="voivodeship" id="voivode--select" name="voivode--select" placeholder="Województwo"/>
+                  <datalist id="voivodeship">
+                      <option value="dolnośląskie">
+                      <option value="kujawsko-pomorskie">
+                      <option value="lubelskie">
+                      <option value="lubuskie">
+                      <option value="łódzkie">
+                      <option value="małopolskie">
+                      <option value="mazowieckie">
+                      <option value="opolskie">
+                      <option value="podkarpackie">
+                      <option value="podlaskie">
+                      <option value="pomorskie">
+                      <option value="śląskie">
+                      <option value="świętokrzyskie">
+                      <option value="warmińsko-mazurskie">
+                      <option value="wielkopolskie">
+                      <option value="zachodniopomorskie">
+                  </datalist>
+                </div>
+                <div class="input-container search-item">
+                  <i class="bi bi-search"></i>
+                  <input type="submit" value="Szukaj">
+                </div>
               </form>
           </div>
        <div class="container">
