@@ -108,7 +108,7 @@ const indexForm = document.querySelector('input[name="search-item"]');
 indexForm.addEventListener('keyup', e => {
     e.preventDefault();
     const query =  indexForm.value.trim().toLowerCase();
-    console.log(query);
+    // console.log(query);
     findItem(query);
 });
 
