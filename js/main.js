@@ -85,12 +85,31 @@ const row = document.querySelector('.row.store--items');
             }
     }else{
         userType.innerHTML = `Aktualnie sprzedajesz:`;
+ 
         createAd();
         // showStatistics();
         sendToDb(userSession.radioType);
+       
         showStatistics();
+        checkIfHaveProducts().then(product => {
+            console.log(product);
+        });
     }
 }
+
+const checkIfHaveProducts = async () => {
+    console.log('tses');
+    db.collection('produkty').get().then(doc => {
+        if(doc.exists){
+            console.log(doc.data());
+        }else{
+            console.log('err');
+        }
+    })
+    const items = document.querySelectorAll('.product--item');
+    return items;
+}
+
 
 const compareItems = (product, id) => {
     let html = ``;

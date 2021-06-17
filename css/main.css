@@ -111,6 +111,32 @@
     display: none;
 }
 
+.user--account{
+    background-color: #2bae66ff;
+    width: 100%;
+    height: 70px;
+}
+
+.myacc-container {
+    width: 80%;
+    height: 100%;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+}
+
+.myacc-container > *{
+    margin: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.user--account .nav-link{
+    color: white;
+}
+
 @media screen and (max-width: 992px) {
     .carousel-inner img{
         height: 300px;
