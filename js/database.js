@@ -3,7 +3,7 @@ const userSession = JSON.parse(sessionStorage.getItem('userSession'));
 
 const addProduct = (product, id) => {
     let html = `
-    <div class="col-xl-6 col-xxl-6 col-md-6 mb-5 product--item" data-id=${id}>
+    <div class="col-xl-4 col-xxl-4 col-md-6 mb-5 product--item" data-id=${id}>
     <div class="card bg-light border-0 h-100">
         <div class="card-body p-2 p-lg-2 pt-0 pt-lg-0">
             <a href="${imgTemplate(product.img_address)}" data-lightbox="${product.title}" data-title="${product.title}">
@@ -11,7 +11,7 @@ const addProduct = (product, id) => {
             </a> 
             <p class="fs-12 p-1 m-0 searching-title">${product.title}</p>
                 <p class="p-1 m-0 fw-bold"> ${product.cena} zł </p>
-                <p class="fs-16 p-1"> ${JSON.parse(localStorage.getItem(product.author)).voivode}, ${getTime(product)}</p>
+                <p class="fs-16 p-1"><span class="searching-voivode">${JSON.parse(localStorage.getItem(product.author)).voivode}</span>, ${getTime(product)}</p>
                 <button type="button" class="btn btn-primary show--offer" data-bs-toggle="modal" data-bs-target="#showProductModal">Przejdź do oferty</button>
         </div>
     </div>
@@ -82,8 +82,26 @@ const findItem = (searchingItem) => {
     }).catch(err => {
         console.log(err);
     })
- 
 };
+
+let getVoivode = async () => {
+    let voivodeItem = document.querySelectorAll('.searching-voivode');
+    return voivodeItem;
+}
+
+const findVoivode = (searchingVoivode) => {
+    getVoivode().then(search => {
+        Array.from(search)
+        .filter((title) => !title.textContent.toLocaleLowerCase().includes(searchingVoivode))
+        .forEach((title) => title.parentElement.parentElement.parentElement.classList.add('filtered', 'flex'));
+    
+        Array.from(search)
+        .filter((title) => title.textContent.toLocaleLowerCase().includes(searchingVoivode))
+        .forEach((title) => title.parentElement.parentElement.parentElement.classList.remove('filtered', 'flex'));
+    }).catch(err => {
+        console.log(err);
+    })
+}
 
 
 const indexForm = document.querySelector('input[name="search-item"]');
@@ -92,7 +110,14 @@ indexForm.addEventListener('keyup', e => {
     const query =  indexForm.value.trim().toLowerCase();
     console.log(query);
     findItem(query);
-})
+});
+
+const voivodeForm = document.querySelector('input[list="voivodeship"]');
+voivodeForm.addEventListener('keyup', e => {
+    e.preventDefault();
+    const query = voivodeForm.value.trim().toLowerCase();
+    findVoivode(query);
+});
 
 
 
