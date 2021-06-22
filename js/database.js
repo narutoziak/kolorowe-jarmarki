@@ -119,5 +119,25 @@ voivodeForm.addEventListener('keyup', e => {
     findVoivode(query);
 });
 
+const searchBtn = document.querySelector('.search-item');
+searchBtn.addEventListener('click', e => {
+    e.preventDefault();
+    const queryItem = indexForm.value.trim().toLowerCase();
+    const queryVoivode = voivodeForm.value.trim().toLowerCase();
+    console.log(queryItem.length, queryVoivode.length);
+    if(queryItem.length == 0){
+        indexForm.parentElement.classList.add('warning');
+        indexForm.classList.add('warning');
 
+        voivodeForm.parentElement.classList.add('warning');
+        voivodeForm.classList.add('warning');
+    }else if (queryItem.length > 0){
+        indexForm.parentElement.classList.remove('warning');
+        indexForm.classList.remove('warning');
 
+        voivodeForm.parentElement.classList.remove('warning');
+        voivodeForm.classList.remove('warning');
+    }
+    
+    
+});
