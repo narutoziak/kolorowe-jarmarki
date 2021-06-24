@@ -7,6 +7,7 @@ let userSession = JSON.parse(sessionStorage.getItem('userSession'));
 const sendToDb = (type) => {
     if(type === 'seller'){
         db.collection("produkty").orderBy('created_at', 'desc').onSnapshot(snapshot => {
+
             snapshot.docChanges().forEach(change => {
                 const doc = change.doc;
                 if(doc.data().author === userSession.login){  
@@ -18,6 +19,18 @@ const sendToDb = (type) => {
                         deleteProduct(doc.id);
                         addProduct(doc.data(), doc.id);           
                     }
+                }
+            });
+
+            checkIfHaveProducts().then(product => {
+                const userType = document.querySelector('.user--accType');
+                if(product.length > 1 ){
+                    userType.innerHTML +=` ${product.length} produkty`;
+                }else if(product.length == 1){
+                    userType.innerHTML +=` ${product.length} produkt`;
+                }
+                else{
+                    userType.innerHTML = `<h3 class="text-center py-5" >Aktualnie nic nie sprzedajesz... 😕</h3>`;
                 }
             });
             // Delete item for seller
@@ -68,15 +81,16 @@ const sendToDb = (type) => {
         });
     }
 }
-
 const userType = () => {
-const userName = document.querySelector('.user--name');
 const userType = document.querySelector('.user--accType');
+
+// const userName = document.querySelector('.user--name');
 const row = document.querySelector('.row.store--items');
-    userName.innerHTML+= `${userSession.name}!`;
+    // userName.innerHTML+= `${userSession.name}!`;
+    userNavbar();
     if(userSession.radioType === "buyer"){
         userType.innerHTML = `Aktualnie obserwujesz:`;
-        showStatistics();
+        // showStatistics();
             if(userSession.products.length === 0){
                 row.innerHTML=`<h3 class="text-center py-5" >Coś tu pusto... 😭</h3>`;
             }else{
@@ -84,21 +98,48 @@ const row = document.querySelector('.row.store--items');
                 
             }
     }else{
-        userType.innerHTML = `Aktualnie sprzedajesz:`;
+        userType.innerHTML = `Aktualnie sprzedajesz`;
  
-        createAd();
+        // createAd();
         // showStatistics();
         sendToDb(userSession.radioType);
        
-        showStatistics();
-        checkIfHaveProducts().then(product => {
-            console.log(product);
-        });
+        // showStatistics();
+
     }
 }
 
+const userNavbar = () => {
+    const userNav = document.querySelector('.user--account');
+    let html = ``;
+    if (userSession.radioType === 'buyer'){
+        html = `
+        <div class="myacc-container">
+            <ul>
+                <li class="nav-item"><a class="nav-link active fw-bold" aria-current="page" href="home.html">Obserwowane produkty</a></li>
+                <li class="nav-item"><a class="nav-link" href="autor.html">Ustawienia konta</a></li>
+                <li class="nav-item"><a class="nav-link" href="autor.html">Wiadomości</a></li>
+                <button type="button" class="btn btn-danger clear--fav">Usuń produkty z obserwowanych</button>
+            </ul>
+        </div>
+        `
+    }else{
+        html = `
+        <div class="myacc-container">
+        <ul>
+            <li class="nav-item"><a class="nav-link active fw-bold" aria-current="page" href="home.html">Sprzedawane</a></li>
+            <li class="nav-item"><a class="nav-link" href="settings.html">Ustawienia konta</a></li>
+            <li class="nav-item"><a class="nav-link" href="messages.html">Wiadomości</a></li>
+            <button type="button" class="btn btn-light create--offer" data-bs-toggle="modal" data-bs-target="#addNewProductModal">Utwórz ogłoszenie</button>
+        </ul>
+        </div>
+        `
+    }
+    userNav.innerHTML = html;
+};
+
+
 const checkIfHaveProducts = async () => {
-    console.log('tses');
     db.collection('produkty').get().then(doc => {
         if(doc.exists){
             console.log(doc.data());
@@ -122,7 +163,7 @@ const compareItems = (product, id) => {
     if(matched){
         product = product.data();
         html = `
-        <div class="col-xl-6 col-xxl-6 mb-5 product--item" data-id="${id}">
+        <div class="col-xl-4 col-xxl-4 col-md-6 mb-5 product--item" data-id="${id}">
         <div class="card bg-light border-0 h-100">
             <div class="card-body text-center p-4 p-lg-5 pt-0 pt-lg-0">
                 <h3 class="fs-4 fw-bold p-3">${product.title}</h3>
@@ -170,7 +211,7 @@ const addProduct = (product, id) => {
     // console.log(showTime);
     const showList = document.querySelector('.store--items');
     let html = `
-    <div class="col-xl-6 col-xxl-6 mb-5 product--item" data-id="${id}">
+    <div class="col-xl-4 col-xxl-4 col-md-6 mb-5 product--item" data-id="${id}">
     <div class="card bg-light border-0 h-100">
         <div class="card-body text-center p-4 p-lg-5 pt-0 pt-lg-0">
             <h3 class="fs-4 fw-bold p-3">${product.title}</h3>
@@ -386,6 +427,50 @@ const modifyRecord = (id) => {
         });
     });
 }
-
-
 userType();
+
+
+const userNavigation = document.querySelectorAll('.myacc-container ul li > a');
+console.log(userNavigation);
+
+// clear font weigth on clicking in nav
+const clearNavigationStatus = () => {
+    userNavigation.forEach(link => {
+        link.classList.remove('fw-bold', 'active');
+    });
+};
+
+const userSettings = () => {
+    const window = document.querySelector('section .container-fluid');
+    
+    window.childNodes[3].style.display="none";
+}
+
+
+userNavigation.forEach((link, index) => {
+    switch(index){
+        case 0:
+            link.addEventListener('click', e => {
+                e.preventDefault();
+                clearNavigationStatus();
+                link.classList.add('fw-bold', 'active');
+                userType();
+            });
+            break;
+        case 1:
+            link.addEventListener('click', e => {
+                e.preventDefault();
+                clearNavigationStatus();
+                link.classList.add('fw-bold', 'active');
+                userSettings();
+            });
+            break;
+        case 2:
+            link.addEventListener('click', e => {
+                e.preventDefault();
+                clearNavigationStatus();
+                link.classList.add('fw-bold', 'active')
+            });
+            break;
+    }
+});
