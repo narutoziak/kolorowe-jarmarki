@@ -536,7 +536,7 @@ userNavigation.forEach((link, index) => {
                 }
                 storeItems.style.display = "";
                 userMessages.style.display = "none";
-                userSettings.style.display = "none";
+                userSettings.style.display = "none"; 
             });
             break;
         case 1:
