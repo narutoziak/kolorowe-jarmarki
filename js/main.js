@@ -2,7 +2,7 @@
 
 
 // Web page for buyer or seller
-
+const contentContainer = document.querySelector('section .container-fluid');
 let userSession = JSON.parse(sessionStorage.getItem('userSession'));
 const sendToDb = (type) => {
     if(type === 'seller'){
@@ -82,12 +82,12 @@ const sendToDb = (type) => {
     }
 }
 const userType = () => {
+contentContainer.childNodes[3].style.display="";
 const userType = document.querySelector('.user--accType');
 
 // const userName = document.querySelector('.user--name');
 const row = document.querySelector('.row.store--items');
     // userName.innerHTML+= `${userSession.name}!`;
-    userNavbar();
     if(userSession.radioType === "buyer"){
         userType.innerHTML = `Aktualnie obserwujesz:`;
         // showStatistics();
@@ -116,9 +116,9 @@ const userNavbar = () => {
         html = `
         <div class="myacc-container">
             <ul>
-                <li class="nav-item"><a class="nav-link active fw-bold" aria-current="page" href="home.html">Obserwowane produkty</a></li>
-                <li class="nav-item"><a class="nav-link" href="autor.html">Ustawienia konta</a></li>
-                <li class="nav-item"><a class="nav-link" href="autor.html">Wiadomości</a></li>
+                <li class="nav-item"><a class="nav-link active fw-bold" aria-current="page" href="#">Obserwowane produkty</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Ustawienia konta</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Wiadomości</a></li>
                 <button type="button" class="btn btn-danger clear--fav">Usuń produkty z obserwowanych</button>
             </ul>
         </div>
@@ -127,9 +127,9 @@ const userNavbar = () => {
         html = `
         <div class="myacc-container">
         <ul>
-            <li class="nav-item"><a class="nav-link active fw-bold" aria-current="page" href="home.html">Sprzedawane</a></li>
-            <li class="nav-item"><a class="nav-link" href="settings.html">Ustawienia konta</a></li>
-            <li class="nav-item"><a class="nav-link" href="messages.html">Wiadomości</a></li>
+            <li class="nav-item"><a class="nav-link active fw-bold" aria-current="page" href="#">Sprzedawane</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Ustawienia konta</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Wiadomości</a></li>
             <button type="button" class="btn btn-light create--offer" data-bs-toggle="modal" data-bs-target="#addNewProductModal">Utwórz ogłoszenie</button>
         </ul>
         </div>
@@ -427,12 +427,12 @@ const modifyRecord = (id) => {
         });
     });
 }
+userNavbar();
 userType();
 
 
-const userNavigation = document.querySelectorAll('.myacc-container ul li > a');
-console.log(userNavigation);
 
+const userNavigation = document.querySelectorAll('.myacc-container ul li > a');
 // clear font weigth on clicking in nav
 const clearNavigationStatus = () => {
     userNavigation.forEach(link => {
@@ -440,21 +440,103 @@ const clearNavigationStatus = () => {
     });
 };
 
-const userSettings = () => {
-    const window = document.querySelector('section .container-fluid');
-    
-    window.childNodes[3].style.display="none";
+const userSettingsContainer = () => {
+    const userSettings = document.querySelector('.user--settings');
+    let html = `
+    <div class="row mb-5">
+    <div class="col-sm-6">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Special title treatment</h5>
+          <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+          <a href="#" class="btn btn-primary">Go somewhere</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6 mb-5">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Special title treatment</h5>
+          <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+          <a href="#" class="btn btn-primary">Go somewhere</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6 mb-5">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Special title treatment</h5>
+        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+        <a href="#" class="btn btn-primary">Go somewhere</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 mb-5">
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Special title treatment</h5>
+      <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+      <a href="#" class="btn btn-primary">Go somewhere</a>
+    </div>
+  </div>
+</div>
+  </div>
+    `;
+    userSettings.innerHTML = html;
+};
+
+const userMessagesContainer = () => {
+    const userMessages = document.querySelector('.user--messages');
+    let html = `
+    <div class="d-flex position-relative bg-light p-2 mb-3">
+    <div class="p-3">
+      <h5 class="mt-0">Custom component with stretched link</h5>
+      <p>This is some placeholder content for the custom component. It is intended to mimic what some real-world content would look like, and we're using it here to give the component a bit of body and size.</p>
+      <a href="#" class="stretched-link">Go somewhere</a>
+    </div>
+  </div>
+  <div class="d-flex position-relative bg-light p-2 mb-3">
+  <div class="p-3">
+    <h5 class="mt-0">Custom component with stretched link</h5>
+    <p>This is some placeholder content for the custom component. It is intended to mimic what some real-world content would look like, and we're using it here to give the component a bit of body and size.</p>
+    <a href="#" class="stretched-link">Go somewhere</a>
+  </div>
+</div>
+    `;
+    userMessages.innerHTML = html;
+
 }
 
-
 userNavigation.forEach((link, index) => {
+    const storeItems = document.querySelector('.store--items');
+    const userAcc = document.querySelector('.user--accType');
+    const userSettings = document.querySelector('.user--settings');
+    const userMessages = document.querySelector('.user--messages');
     switch(index){
         case 0:
             link.addEventListener('click', e => {
                 e.preventDefault();
                 clearNavigationStatus();
                 link.classList.add('fw-bold', 'active');
-                userType();
+                if(userSession.radioType == 'seller'){
+                    userAcc.innerHTML = ``;
+                    checkIfHaveProducts().then(product => {
+                        const userType = document.querySelector('.user--accType');
+                        if(product.length > 1 ){
+                            userType.innerHTML +=`Aktualnie sprzedajesz ${product.length} produkty`;
+                        }else if(product.length == 1){
+                            userType.innerHTML +=`Aktualnie sprzedajesz ${product.length} produkt`;
+                        }
+                        else{
+                            userType.innerHTML = `<h3 class="text-center py-5" >Aktualnie nic nie sprzedajesz... 😕</h3>`;
+                        }
+                    });
+                }else{
+                    userAcc.innerHTML = "Aktualnie obserwujesz: ";
+                }
+                storeItems.style.display = "";
+                userMessages.style.display = "none";
+                userSettings.style.display = "none";
             });
             break;
         case 1:
@@ -462,7 +544,11 @@ userNavigation.forEach((link, index) => {
                 e.preventDefault();
                 clearNavigationStatus();
                 link.classList.add('fw-bold', 'active');
-                userSettings();
+                storeItems.style.display = "none";
+                userMessages.style.display = "none";
+                userSettings.style.display = "";
+                userAcc.innerHTML = `<h3>Ustawienia konta</h3>`;
+                userSettingsContainer();
             });
             break;
         case 2:
@@ -470,6 +556,11 @@ userNavigation.forEach((link, index) => {
                 e.preventDefault();
                 clearNavigationStatus();
                 link.classList.add('fw-bold', 'active')
+                storeItems.style.display = "none";
+                userMessages.style.display = "";
+                userSettings.style.display = "none";
+                userAcc.innerHTML = `<h3>Wiadomości</h3>`;
+                userMessagesContainer();
             });
             break;
     }
