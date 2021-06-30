@@ -211,6 +211,25 @@ form.addEventListener('submit', e => {
             if(JSON.parse(localStorage.getItem(user.login))){
                 console.log("Istnieje juz taki user");
             }else{
+                let addNewUser = {
+                    login: user.login,
+                    pass: user.pass,
+                    email: user.email,
+                    name: user.name,
+                    surname: user.surname,
+                    tel: user.tel,
+                    voivode: user.voivode,
+                    radioType: user.radioType,
+                    hobby: user.hobby,
+                    products: user.products
+                };
+                // console.log(newAd, user.login, typeof user, typeof newAd)
+                db.collection("users").add(addNewUser).then(() => {
+                    console.log(`dodano usera ${user}`);
+                    form.reset();
+                }).catch(err => {
+                    console.log(err);
+                });
                 localStorage.setItem(user.login, JSON.stringify(user));
                 showPopup(user);
             }
