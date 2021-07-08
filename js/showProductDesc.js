@@ -105,7 +105,6 @@ const getLoggedUserId = async () => {
 const addToFavourite = (product ,id) => {
         showProductDesc(product, id).then(data => {
             const btnFav = document.querySelector('.add--or--remove--fav');
-            console.log(btnFav);
             btnFav.innerHTML = `Dodaj do ulubionych <i class="bi bi-star text-warning">`;
              // save product to localStorage and update sessionStorage
             const error = document.querySelector('.feedback');

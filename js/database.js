@@ -11,13 +11,14 @@ const addProduct = (product, id) => {
             </a> 
             <p class="fs-12 p-1 m-0 searching-title">${product.title}</p>
                 <p class="p-1 m-0 fw-bold"> ${product.cena} zł </p>
-                <p class="fs-16 p-1"><span class="searching-voivode">${JSON.parse(localStorage.getItem(product.author)).voivode}</span>, ${getTime(product)}</p>
+                <p class="fs-16 p-1"><span class="searching-voivode"></span>, ${getTime(product)}</p>
                 <button type="button" class="btn btn-primary show--offer" data-bs-toggle="modal" data-bs-target="#showProductModal">Przejdź do oferty</button>
         </div>
     </div>
     </div>
     `
     showList.innerHTML += html;
+
 }
 
 const deleteProduct = (id) => {
@@ -28,7 +29,11 @@ const deleteProduct = (id) => {
         }
     });
 }
-
+const showSellerVoivode = async (user) => {
+    const voivodeUI = document.querySelectorAll('.searching-voivode');
+    console.log(voivodeUI, user);
+    return voivodeUI;
+};
 
 db.collection('produkty').orderBy('created_at', 'desc').onSnapshot(snapshot => {
     // kiedy otrzymujemy dane
@@ -36,14 +41,19 @@ db.collection('produkty').orderBy('created_at', 'desc').onSnapshot(snapshot => {
             const row = document.querySelector('.store--items');
             row.innerHTML = `<h3 class="text-center py-5" >Aktualnie nie mamy żadnych ofert 😭</h3>`
         }
-        snapshot.docChanges().forEach(change => {
+        snapshot.docChanges().forEach((change,index) => {
             const doc = change.doc;
             if(change.type === 'added'){
                 addProduct(doc.data(), doc.id);
+                findUser(doc.data()).then(data => {
+                    const voivodeUI = document.querySelectorAll('.searching-voivode');
+                    voivodeUI[index].textContent = data.voivode;
+                })
             }else if(change.type === 'removed'){
                 deleteProduct(doc.id);
             }
         })
+
     // // console.log(snapshot.docs.length);
     // snapshot.docs.forEach((doc) => {
     //     // console.log(doc.data());
