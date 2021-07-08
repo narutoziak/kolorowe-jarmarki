@@ -29,11 +29,6 @@ const deleteProduct = (id) => {
         }
     });
 }
-const showSellerVoivode = async (user) => {
-    const voivodeUI = document.querySelectorAll('.searching-voivode');
-    console.log(voivodeUI, user);
-    return voivodeUI;
-};
 
 db.collection('produkty').orderBy('created_at', 'desc').onSnapshot(snapshot => {
     // kiedy otrzymujemy dane

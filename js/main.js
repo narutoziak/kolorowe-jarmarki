@@ -25,9 +25,9 @@ const sendToDb = (type) => {
             checkIfHaveProducts().then(product => {
                 const userType = document.querySelector('.user--accType');
                 if(product.length > 1 ){
-                    userType.innerHTML +=` ${product.length} produkty`;
+                    userType.innerHTML =`Aktualnie sprzedajesz ${product.length} produkty`;
                 }else if(product.length == 1){
-                    userType.innerHTML +=` ${product.length} produkt`;
+                    userType.innerHTML =`Aktualnie sprzedajesz ${product.length} produkt`;
                 }
                 else{
                     userType.innerHTML = `<h3 class="text-center py-5" >Aktualnie nic nie sprzedajesz... 😕</h3>`;
@@ -97,13 +97,10 @@ const row = document.querySelector('.row.store--items');
                 sendToDb(userSession.radioType);
                 
             }
-    }else{
-        userType.innerHTML = `Aktualnie sprzedajesz`;
- 
+    }else{ 
         // createAd();
         // showStatistics();
         sendToDb(userSession.radioType);
-       
         // showStatistics();
 
     }
