@@ -424,10 +424,6 @@ const modifyRecord = (id) => {
         });
     });
 }
-userNavbar();
-userType();
-
-
 
 const userNavigation = document.querySelectorAll('.myacc-container ul li > a');
 // clear font weigth on clicking in nav
@@ -562,3 +558,10 @@ userNavigation.forEach((link, index) => {
             break;
     }
 });
+
+if(userSession === null){
+    location.replace('index.html');
+}else{
+    userNavbar();
+    userType();
+}
