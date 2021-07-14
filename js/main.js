@@ -425,6 +425,14 @@ const modifyRecord = (id) => {
     });
 }
 
+if(userSession === null){
+    location.replace('index.html');
+}else{
+    userNavbar();
+    userType();
+}
+
+
 const userNavigation = document.querySelectorAll('.myacc-container ul li > a');
 // clear font weigth on clicking in nav
 const clearNavigationStatus = () => {
@@ -436,44 +444,52 @@ const clearNavigationStatus = () => {
 const userSettingsContainer = () => {
     const userSettings = document.querySelector('.user--settings');
     let html = `
+
     <div class="row mb-5">
-    <div class="col-sm-6">
+    <div class="col-sm-6 mb-5">
       <div class="card">
         <div class="card-body">
-          <h5 class="card-title">Special title treatment</h5>
-          <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-          <a href="#" class="btn btn-primary">Go somewhere</a>
+          <h5 class="card-title">Zmień hasło</h5>
+          <p class="card-text">Wprowadź swoje stare hasło, w celu weryfikacji i utwórz silniejsze hasło!</p>
+          <a href="#" class="btn btn-primary change-pass">Zmień hasło</a>
         </div>
       </div>
     </div>
     <div class="col-sm-6 mb-5">
       <div class="card">
         <div class="card-body">
-          <h5 class="card-title">Special title treatment</h5>
-          <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-          <a href="#" class="btn btn-primary">Go somewhere</a>
+          <h5 class="card-title">Edytuj dane adresowe</h5>
+          <p class="card-text">Jeżeli zmieniłeś miejsce zamieszkania, bądź wprowadziłeś błędne dane, tutaj możesz je zmienić.</p>
+          <a href="#" class="btn btn-primary change-address">Zmień dane adresowe</a>
         </div>
       </div>
     </div>
     <div class="col-sm-6 mb-5">
     <div class="card">
       <div class="card-body">
-        <h5 class="card-title">Special title treatment</h5>
-        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-        <a href="#" class="btn btn-primary">Go somewhere</a>
+        <h5 class="card-title">Aktualne informacje o koncie</h5>
+        <p class="card-text">Tutaj znajdziesz wszystkie informacje dotyczące twojego konta.</p>
+        <a href="#" class="btn btn-primary show-profile">Zobacz profil</a>
       </div>
     </div>
   </div>
   <div class="col-sm-6 mb-5">
   <div class="card">
     <div class="card-body">
-      <h5 class="card-title">Special title treatment</h5>
-      <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-      <a href="#" class="btn btn-primary">Go somewhere</a>
+      <h5 class="card-title">Usuń konto</h5>
+      <p class="card-text">W celu usunięcia konta i zarchiwizowania wszystkich istniejących ofert kliknij tutaj.</p>
+      <a href="#" class="btn btn-primary delete-account" data-bs-toggle="modal" data-bs-target="#showUserModal">Usuń konto</a>
     </div>
   </div>
 </div>
   </div>
+
+  <div class="modal fade" id="showUserModal" tabindex="-1" aria-labelledby="showUserModal" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+      <div class="modal-user">
+      </div>
+  </div>
+</div>
     `;
     userSettings.innerHTML = html;
 };
@@ -542,6 +558,49 @@ userNavigation.forEach((link, index) => {
                 userSettings.style.display = "";
                 userAcc.innerHTML = `<h3>Ustawienia konta</h3>`;
                 userSettingsContainer();
+                const deleteUserBtn = document.querySelector('.delete-account');
+                deleteUserBtn.addEventListener('click', e => {
+                    e.preventDefault();
+                    const content = document.querySelector('.modal-user');
+                    const html = ` <div class="modal-content">
+                    <div class="modal-header bg-danger text-white">
+                      <h5 class="modal-title">Uwaga!</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>   
+                    <div class="modal-body">
+                    <p>Czy napewo zamierzasz usunąć swoje konto?</p>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Anuluj</button>
+                    <button type="button" class="btn btn-danger delete-account-btn" data-bs-dismiss="modal">Usuń konto</button>
+                  </div>
+                </div>`;
+                    content.innerHTML = html;
+                    const deleteUser = document.querySelector('.delete-account-btn');
+                    deleteUser.addEventListener('click', e => {
+                        e.preventDefault();
+                        db.collection('produkty').get().then(doc => {
+                            doc.forEach(item => {
+                                if(item.data().author === userSession.login){
+                                    console.log(item.id, item.data());
+                                    db.collection('produkty').doc(item.id).delete().then(() =>{
+                                        console.log('usunieto produkty pomyslnie!');
+                                    })
+                                }
+                            })
+                        });
+                        db.collection('users').where("login", "==", userSession.login).get().then(data => {
+                            data.forEach(item => {
+                                db.collection('users').doc(item.id).delete().then(() => {
+                                    console.log(`Szkoda że odchodzisz od nas ${userSession.login}, zapraszamy ponownie :)`);
+                                    location.replace('index.html');
+                                })
+                            })
+                        })
+                        sessionStorage.clear();
+                    })
+                });
+                
             });
             break;
         case 2:
@@ -559,9 +618,3 @@ userNavigation.forEach((link, index) => {
     }
 });
 
-if(userSession === null){
-    location.replace('index.html');
-}else{
-    userNavbar();
-    userType();
-}
