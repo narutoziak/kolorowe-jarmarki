@@ -460,7 +460,7 @@ const userSettingsContainer = () => {
         <div class="card-body">
           <h5 class="card-title">Edytuj dane adresowe</h5>
           <p class="card-text">Jeżeli zmieniłeś miejsce zamieszkania, bądź wprowadziłeś błędne dane, tutaj możesz je zmienić.</p>
-          <a href="#" class="btn btn-primary change-address">Zmień dane adresowe</a>
+          <a href="#" class="btn btn-primary change-address" data-bs-toggle="modal" data-bs-target="#showUserModal">Zmień dane adresowe</a>
         </div>
       </div>
     </div>
@@ -469,7 +469,7 @@ const userSettingsContainer = () => {
       <div class="card-body">
         <h5 class="card-title">Aktualne informacje o koncie</h5>
         <p class="card-text">Tutaj znajdziesz wszystkie informacje dotyczące twojego konta.</p>
-        <a href="#" class="btn btn-primary show-profile">Zobacz profil</a>
+        <a href="#" class="btn btn-primary show-profile" data-bs-toggle="modal" data-bs-target="#showUserModal">Zobacz profil</a>
       </div>
     </div>
   </div>
@@ -516,6 +516,14 @@ const userMessagesContainer = () => {
 
 }
 
+const voivodeValidate = () => {
+    if(voisSelect.value === ""){
+        return false
+    }else{
+        return voisSelect.value;
+    }
+};
+
 userNavigation.forEach((link, index) => {
     const storeItems = document.querySelector('.store--items');
     const userAcc = document.querySelector('.user--accType');
@@ -558,10 +566,10 @@ userNavigation.forEach((link, index) => {
                 userSettings.style.display = "";
                 userAcc.innerHTML = `<h3>Ustawienia konta</h3>`;
                 userSettingsContainer();
+                const content = document.querySelector('.modal-user');
                 const deleteUserBtn = document.querySelector('.delete-account');
                 deleteUserBtn.addEventListener('click', e => {
                     e.preventDefault();
-                    const content = document.querySelector('.modal-user');
                     const html = ` <div class="modal-content">
                     <div class="modal-header bg-danger text-white">
                       <h5 class="modal-title">Uwaga!</h5>
@@ -576,6 +584,7 @@ userNavigation.forEach((link, index) => {
                   </div>
                 </div>`;
                     content.innerHTML = html;
+                    // delete user and his ads if he's seller
                     const deleteUser = document.querySelector('.delete-account-btn');
                     deleteUser.addEventListener('click', e => {
                         e.preventDefault();
@@ -600,7 +609,169 @@ userNavigation.forEach((link, index) => {
                         sessionStorage.clear();
                     })
                 });
-                
+                // show information about account
+                const userInfoBtn = document.querySelector('.show-profile');
+                userInfoBtn.addEventListener('click', e => {
+                    e.preventDefault();
+                    let userAccType;
+                    if(userSession.radioType === 'seller'){
+                            userAccType = 'sprzedawca';
+                        }else{
+                            userAccType = 'kupujący';
+                        }
+                    const html = ` <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">Twoje aktualne dane</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>   
+                    <div class="modal-body">
+                    <p>Twoje aktualne dane są następujące: </p>
+                    <p>Login: ${userSession.login}</p>
+                    <p>Email: ${userSession.email}</p>
+                    <p>Imię: ${userSession.name}</p>
+                    <p>Nazwisko: ${userSession.surname}</p>
+                    <p>Telefon: ${userSession.tel}</p>
+                    <p>Województwo: ${userSession.voivode}</p>
+                    <p>Typ konta: ${userAccType}</p>
+                    <p>Hobby: <span class="user-hobby"> </span></p>
+                    <p>Ilość produktów: <span class="user-products"></span></p>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+                  </div>
+                </div>`;
+                    content.innerHTML = html;
+                    const userHobby = document.querySelector('.user-hobby');
+                    userSession.hobby.forEach(item => {
+                        userHobby.innerHTML += `${item} `;
+                    })
+                    const userProducts = document.querySelector('.user-products');
+                    if(userSession.radioType === 'seller'){
+                        db.collection('produkty').get().then(doc => {
+                            let sum=0;
+                            doc.forEach(item =>{
+                                if(item.data().author === userSession.login){
+                                    sum++;
+                                }
+                            })
+                            userProducts.innerHTML = sum;
+                        })
+                    }else{
+                        userSession.products.forEach(() => {
+                            if(userSession.products.length === 1){
+                                userProducts.innerHTML = `0`;
+                            }else{
+                                userProducts.innerHTML = userSession.products.length;
+                            }
+                        });
+                    }
+                });
+                // edit user data
+                const userEditBtn = document.querySelector('.change-address');
+                userEditBtn.addEventListener('click', e => {
+                    e.preventDefault();
+                    const html = ` <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">Twoje aktualne dane</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>   
+                    <div class="modal-body">
+                    <form>
+                    <p class="text-primary">Wprowadź dane osobiste</p>
+                    <div>
+                        <label>Imię</label> <br>
+                        <input type="text" name="name" value="${userSession.name}"> 
+                    </div>
+                    <div>
+                        <label>Nazwisko</label> <br>
+                        <input type="text" name="surname" value="${userSession.surname}"> 
+                    </div>
+                    <div>
+                        <label>Numer Telefonu</label> <br>
+                        <input type="text" name="tel" value="${userSession.tel}"> 
+                    </div>
+                    <p class="text-primary">Wybierz województwo: </p>
+                    <div>
+                        <select name="voivodeship" id="voisSelect">
+                            <option selected value="">--Wybierz województwo--</option>
+                            <option value="dolnoslaskie">dolnośląskie</option>
+                            <option value="kujawsko-pomorskie">kujawsko-pomorskie</option>
+                            <option value="lubelskie">lubelskie</option>
+                            <option value="lubuskie">lubuskie</option>
+                            <option value="łódzkie">łódzkie</option>
+                            <option value="małopolskie">małopolskie</option>
+                            <option value="mazowieckie">mazowieckie</option>
+                            <option value="opolskie">opolskie</option>
+                            <option value="podkarpackie">podkarpackie</option>
+                            <option value="podlaskie">podlaskie</option>
+                            <option value="pomorskie">pomorskie</option>
+                            <option value="śląskie">śląskie</option>
+                            <option value="świętokrzyskie">świętokrzyskie</option>
+                            <option value="warmińsko-mazurskie">warmińsko-mazurskie</option>
+                            <option value="wielkopolskie">wielkopolskie</option>
+                            <option value="zachodniopomorskie">zachodniopomorskie</option>
+                        </select>
+                    </div>
+                    <p class="text-primary">Wybierz swoje zaintersowania: </p>
+                    <div class="checkbox">
+                        <label class="not">Samochody</label><input type="checkbox" name="hobby" value="cars" >
+                        <label class="not">Elektronika</label><input type="checkbox" name="hobby" value="electronics" >
+                        <label class="not">Projektowanie wnętrz</label><input type="checkbox" name="hobby" value="home" >
+                        <label class="not">Ogród </label><input type="checkbox" name="hobby" value="garden" >
+                        <label class="not">Inne</label><input type="checkbox" name="hobby" value="other" >
+                    </div>        
+                </form>
+                    </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-primary userData-change">Zapisz dane</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+                  </div>
+                </div>`;
+                    content.innerHTML = html;
+                    
+                    const userDataChangeBtn = document.querySelector('.userData-change');
+                    const form = document.querySelector('form');
+                      
+                    userDataChangeBtn.addEventListener('click', e => {
+                        e.preventDefault();
+                        let newVoivode=undefined;
+                        if(voivodeValidate()){
+                            newVoivode = voivodeValidate();
+                        }else{
+                            newVoivode=userSession.voivode;
+                        }
+                        const checkboxs = document.querySelectorAll('input[name="hobby"]');
+                        let checkArr = [];
+                        checkboxs.forEach(item => {
+                            if(item.checked){
+                                checkArr.push(item.value);
+                            }
+                        });
+                        db.collection('users').get().then(doc => {
+                            doc.forEach(user => {
+                                if(userSession.login === user.data().login){
+                                    const newUserData = {
+                                        email: userSession.email,
+                                        hobby: checkArr,
+                                        login: userSession.login,
+                                        name: form.name.value,
+                                        pass: userSession.pass,
+                                        products: userSession.products,
+                                        radioType: userSession.radioType,
+                                        surname: form.surname.value,
+                                        tel: form.tel.value,
+                                        voivode: newVoivode
+                                    };
+                                    db.collection("users").doc(user.id).update(newUserData).then(() => {
+                                        form.innerHTML=`<span class="text-success">Dane zostały pomyślnie zmienione!</span>`;
+                                        userDataChangeBtn.remove();
+                                    });
+                                }
+                            });
+                        })
+                    });
+                });
+            
             });
             break;
         case 2:

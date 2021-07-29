@@ -204,6 +204,25 @@
 .form-group.row{
     padding: .5em;
 }
+/* modal for home.html */
+#showUserModal > div > div > div > div.modal-body > form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: .5rem;
+}
+
+#showUserModal form .form-label{
+    width: 15%;
+}
+
+#showUserModal form .user-input{
+    width: 100%;
+}
+
+#showUserModal form .user-input input{
+    width: 90%;
+}
 
 /* for delete modal */
 .delete-content{
